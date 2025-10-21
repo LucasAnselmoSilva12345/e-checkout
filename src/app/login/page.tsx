@@ -1,8 +1,21 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/useAuth';
+
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export default function LoginPage() {
   const { user, loginUser, signupUser } = useAuth();
@@ -29,45 +42,52 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-4 w-80 p-6 border rounded-lg"
-      >
-        <h2 className="text-xl font-bold text-center">
-          {isLogin ? 'Entrar' : 'Criar Conta'}
-        </h2>
+      <Card>
+        <CardHeader>
+          <CardTitle>{isLogin ? 'Entrar' : 'Criar Conta'}</CardTitle>
+          <CardDescription>Entre com o seu melhor e-mail</CardDescription>
+          <CardAction>
+            <Button
+              variant="link"
+              type="submit"
+              onClick={() => setIsLogin(!isLogin)}
+            >
+              {isLogin ? 'Criar conta' : 'Login'}
+            </Button>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-4 w-80 p-6 border rounded-lg"
+          >
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="meuemail@gmail.com"
+              required
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          className="border p-2 rounded"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+            <Label htmlFor="password">Senha</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="*********"
+              required
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-        <input
-          type="password"
-          placeholder="Senha"
-          required
-          className="border p-2 rounded"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button
-          type="submit"
-          className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-        >
-          {isLogin ? 'Entrar' : 'Cadastrar'}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setIsLogin(!isLogin)}
-          className="text-sm text-gray-500 hover:underline"
-        >
-          {isLogin ? 'Criar nova conta' : 'Já tenho uma conta'}
-        </button>
-      </form>
+            <Button
+              type="submit"
+              className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            >
+              {isLogin ? 'Entrar' : 'Cadastrar'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
