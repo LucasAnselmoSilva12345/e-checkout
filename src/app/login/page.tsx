@@ -3,6 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/useAuth';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -17,12 +20,34 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+const loginSchema = z.object({
+  email: z.string().email('Informe um e-mail válido'),
+  password: z
+    .string()
+    .min(8, 'A senha deve ter no mínimo 8 caracteres')
+    .max(16, 'A senha deve ter no máximo 16 caracteres')
+    .regex(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
+    .regex(/\d/, 'A senha deve conter pelo menos um número')
+    .regex(/[!?#!]/, 'A senha deve conter pelo menos um dos caracteres: ! ? #'),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+
 export default function LoginPage() {
   const { user, loginUser, signupUser } = useAuth();
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const router = useRouter();
+  const [isLogin, setIsLogin] = useState(true);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+    watch,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+  });
 
   useEffect(() => {
     if (user) {
@@ -30,15 +55,18 @@ export default function LoginPage() {
     }
   }, [user, router]);
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const onSubmit = (data: LoginFormData) => {
     if (isLogin) {
-      loginUser(email, password);
+      loginUser(data.email, data.password);
     } else {
-      signupUser(email, password);
+      signupUser(data.email, data.password);
     }
+    reset();
     router.push('/collections');
-  }
+  };
+
+  const emailValue = watch('email');
+  const passwordValue = watch('password');
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -58,7 +86,7 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <form
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4 w-80 p-6 border rounded-lg"
           >
             <Label htmlFor="email">Email</Label>
@@ -66,22 +94,49 @@ export default function LoginPage() {
               id="email"
               type="email"
               placeholder="meuemail@gmail.com"
-              required
-              onChange={(e) => setEmail(e.target.value)}
+              {...register('email')}
+              className={`${
+                emailValue && !errors.email
+                  ? 'border-green-500'
+                  : errors.email
+                  ? 'border-red-500'
+                  : ''
+              }`}
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
 
             <Label htmlFor="password">Senha</Label>
             <Input
               id="password"
               type="password"
               placeholder="*********"
-              required
-              onChange={(e) => setPassword(e.target.value)}
+              {...register('password')}
+              className={`${
+                passwordValue && !errors.password
+                  ? 'border-green-500'
+                  : errors.password
+                  ? 'border-red-500'
+                  : ''
+              }`}
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
 
             <Button
               type="submit"
-              className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+              disabled={!isValid}
+              className={`${
+                isValid
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                  : 'bg-gray-400 cursor-not-allowed'
+              } py-2 rounded`}
             >
               {isLogin ? 'Entrar' : 'Cadastrar'}
             </Button>
