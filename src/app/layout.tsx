@@ -24,7 +24,9 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <AuthProvider>
           <Header />
-          <main>{children}</main>
+          <main className="lg:max-w-[1330px] lg:my-0 lg:mx-auto">
+            {children}
+          </main>
         </AuthProvider>
       </body>
     </html>
