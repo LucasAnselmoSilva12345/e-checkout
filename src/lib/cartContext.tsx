@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import type { Product } from './mockProducts';
 
 export type CartItem = Product & {
@@ -15,6 +15,7 @@ type CartContextType = {
   addToCart: (product: Product) => void;
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
+  clearCart: () => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -22,6 +23,21 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      try {
+        setCart(JSON.parse(storedCart));
+      } catch {
+        localStorage.removeItem('cart');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   function openCart() {
     setIsOpen(true);
@@ -59,6 +75,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
+  function clearCart() {
+    setCart([]);
+    localStorage.removeItem('cart');
+  }
+
   return (
     <CartContext.Provider
       value={{
@@ -66,6 +87,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         addToCart,
         removeFromCart,
         updateQuantity,
+        clearCart,
         isOpen,
         openCart,
         closeCart,

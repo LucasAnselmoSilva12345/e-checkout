@@ -11,7 +11,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from './ui/drawer';
 import {
   HoverCard,
@@ -28,6 +27,10 @@ export function Header() {
     useCard();
 
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const subtotal = cart.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   const router = useRouter();
 
@@ -106,6 +109,12 @@ export function Header() {
             <DrawerDescription>
               Itens adicionados ao carrinho aparecerão aqui.
             </DrawerDescription>
+
+            <DrawerClose asChild>
+              <Button variant="secondary" onClick={closeCart}>
+                Fechar
+              </Button>
+            </DrawerClose>
           </DrawerHeader>
 
           <div className="flex-1 p-4 overflow-y-auto">
@@ -160,11 +169,26 @@ export function Header() {
           </div>
 
           <DrawerFooter>
-            <DrawerClose asChild>
-              <Button variant="secondary" onClick={closeCart}>
-                Fechar
-              </Button>
-            </DrawerClose>
+            {cart.length > 0 && (
+              <div className="p-4 border-t text-sm">
+                <div className="flex justify-between mb-3">
+                  <span className="font-medium">Subtotal:</span>
+                  <span className="font-semibold">
+                    R$ {subtotal.toFixed(2)}
+                  </span>
+                </div>
+
+                <Button
+                  className="w-full bg-green-600 hover:bg-green-700 text-white"
+                  onClick={() => {
+                    closeCart();
+                    router.push('/checkout');
+                  }}
+                >
+                  Ir para o checkout
+                </Button>
+              </div>
+            )}
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
