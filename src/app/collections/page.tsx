@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCard } from '@/lib/cartContext';
 import { mockProducts, Product } from '@/lib/mockProducts';
 import { useAuth } from '@/lib/useAuth';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -39,7 +40,15 @@ export default function CollectionPage() {
 
           return (
             <Card key={product.id} className="flex flex-col">
-              <CardHeader></CardHeader>
+              <CardHeader>
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  width={300}
+                  height={300}
+                  className="rounded-lg"
+                />
+              </CardHeader>
               <CardContent className="flex flex-col gap-2">
                 <CardTitle>{product.title}</CardTitle>
                 <div>
