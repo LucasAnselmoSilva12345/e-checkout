@@ -26,7 +26,7 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <Header />
-            <main className="lg:max-w-[1330px] lg:my-0 lg:mx-auto">
+            <main className="lg:max-w-[1330px] lg:my-0 lg:mx-auto px-4 lg:px-0">
               {children}
             </main>
           </CartProvider>

@@ -24,10 +24,19 @@ export default function CollectionPage() {
     return null;
   }
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Coleções</h1>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="pt-5 space-y-4">
+      <div className="space-y-1">
+        <h2 className="text-xl lg:text-2xl text-neutral-800">
+          <span className="font-bold">Sofás em promoção:</span> modular, cama, e
+          mais!
+        </h2>
+        <p className="text-sm text-neutral-700">
+          Descubra ofertas imperdíveis em sofá 2 lugares, sofá 3 lugares e
+          sofá-cama. Escolha o modelo que combina com a sua decoração e
+          aproveite descontos exclusivos.
+        </p>
+      </div>
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
         {mockProducts.map((product) => {
           const discount =
             product.compare_at_price && product.compare_at_price > product.price
@@ -39,35 +48,55 @@ export default function CollectionPage() {
               : 0;
 
           return (
-            <Card key={product.id} className="flex flex-col">
-              <CardHeader>
+            <Card
+              key={product.id}
+              className="py-4 px-4 lg:p-6 flex flex-col gap-2"
+            >
+              <CardHeader className="p-0">
                 <Image
                   src={product.image}
                   alt={product.title}
                   width={300}
                   height={300}
-                  className="rounded-lg"
+                  layout="responsive"
+                  className="relative"
                 />
+                {discount > 0 && (
+                  <div className="absolute bg-green-500 text-white py-1 px-2 text-xs font-medium max-w-max rounded">
+                    {discount}% OFF
+                  </div>
+                )}
               </CardHeader>
-              <CardContent className="flex flex-col gap-2">
-                <CardTitle>{product.title}</CardTitle>
+              <CardContent className="p-0 flex flex-col gap-2">
+                <CardTitle className="text-base font-semibold text-neutral-700 line-clamp-2 lg:line-clamp-1">
+                  <h3>{product.title}</h3>
+                </CardTitle>
                 <div>
                   {product.compare_at_price && (
-                    <p className="text-sm text-gray-500 line-through">
+                    <p className="text-xs text-neutral-500 line-through">
                       R$ {product.compare_at_price.toFixed(2)}
                     </p>
                   )}
-                  <p className="text-lg font-semibold text-blue-600">
-                    R$ {product.price.toFixed(2)}
+                  <p className="text-base lg:text-xl text-green-500 font-semibold">
+                    R${' '}
+                    {(
+                      product.price *
+                      (1 - product.discount_percentage / 100)
+                    ).toFixed(2)}{' '}
+                    <span className="text-xs">à vista</span>
                   </p>
-                  <p className="text-sm text-green-600">
-                    no cartão R$ {product.price.toFixed(2)}
+                  <p className="text-sm text-neutral-700">
+                    ou em até 10x de{' '}
+                    <span className="font-semibold">
+                      R$ {(product.price / 10).toFixed(2)}
+                    </span>{' '}
+                    no cartão
                   </p>
-                  {discount > 0 && (
-                    <p className="text-xs text-red-500">{discount}% OFF</p>
-                  )}
                 </div>
-                <Button className="mt-2" onClick={() => addToCart(product)}>
+                <Button
+                  className="mt-1 bg-green-600 hover:bg-green-700 text-white"
+                  onClick={() => addToCart(product)}
+                >
                   Adicionar ao Carrinho
                 </Button>
               </CardContent>
@@ -75,6 +104,6 @@ export default function CollectionPage() {
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }
