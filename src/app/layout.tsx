@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/lib/useAuth';
 import { Header } from '@/components/Header';
+import { CartProvider } from '@/lib/cartContext';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -20,13 +21,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`}>
         <AuthProvider>
-          <Header />
-          <main className="lg:max-w-[1330px] lg:my-0 lg:mx-auto">
-            {children}
-          </main>
+          <CartProvider>
+            <Header />
+            <main className="lg:max-w-[1330px] lg:my-0 lg:mx-auto px-4 lg:px-0">
+              {children}
+            </main>
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

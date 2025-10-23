@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/lib/useAuth';
+import { useCard } from '@/lib/cartContext';
 import { useRouter } from 'next/navigation';
 import {
   Drawer,
@@ -10,20 +11,27 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from './ui/drawer';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { Button } from './ui/button';
-import { ShoppingCart } from '@geist-ui/icons';
-import { LogOut } from '@geist-ui/icons';
+import { ShoppingCart, LogOut, Minus, Plus, Trash2 } from '@geist-ui/icons';
 
 export function Header() {
   const { user, logoutUser } = useAuth();
+
+  const { cart, removeFromCart, updateQuantity, isOpen, openCart, closeCart } =
+    useCard();
+
+  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const subtotal = cart.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
+
   const router = useRouter();
 
   return (
@@ -74,41 +82,116 @@ export function Header() {
             )}
           </div>
 
-          <div>
-            {user && (
-              <Drawer direction="right">
-                <DrawerTrigger asChild>
-                  <Button className="bg-neutral-200 hover:bg-neutral-400">
-                    <span className="sr-only">Carrinho</span>
-                    <ShoppingCart color="#262626" />
-                  </Button>
-                </DrawerTrigger>
-                <DrawerContent className="h-full w-80 ml-auto border-l bg-white shadow-lg">
-                  <DrawerHeader>
-                    <DrawerTitle>Seu carrinho</DrawerTitle>
-
-                    <DrawerDescription>
-                      Itens adicionados ao carrinho aparecerão aqui.
-                    </DrawerDescription>
-                  </DrawerHeader>
-
-                  <div className="flex-1 p-4 overflow-y-auto">
-                    <p className="text-sm text-muted-foreground">
-                      Nenhum item no carrinho no momento.
-                    </p>
-                  </div>
-
-                  <DrawerFooter>
-                    <DrawerClose asChild>
-                      <Button variant="secondary">Fechar</Button>
-                    </DrawerClose>
-                  </DrawerFooter>
-                </DrawerContent>
-              </Drawer>
-            )}
-          </div>
+          {user && (
+            <Button
+              className="bg-neutral-200 hover:bg-neutral-400 relative"
+              onClick={openCart}
+            >
+              <ShoppingCart color="#262626" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
+                  {cartCount}
+                </span>
+              )}
+            </Button>
+          )}
         </div>
       </div>
+
+      <Drawer
+        direction="right"
+        open={isOpen}
+        onOpenChange={(open) => (open ? openCart() : closeCart())}
+      >
+        <DrawerContent className="h-full w-80 ml-auto border-l bg-white shadow-lg flex flex-col">
+          <DrawerHeader>
+            <DrawerTitle>Seu carrinho</DrawerTitle>
+            <DrawerDescription>
+              Itens adicionados ao carrinho aparecerão aqui.
+            </DrawerDescription>
+
+            <DrawerClose asChild>
+              <Button variant="secondary" onClick={closeCart}>
+                Fechar
+              </Button>
+            </DrawerClose>
+          </DrawerHeader>
+
+          <div className="flex-1 p-4 overflow-y-auto">
+            {cart.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Nenhum item no carrinho no momento.
+              </p>
+            ) : (
+              <div className="flex flex-col gap-4">
+                {cart.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between border-b pb-2"
+                  >
+                    <div>
+                      <p>{item.title}</p>
+                      <p>R$ {(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
+                      >
+                        <Minus size={12} />
+                      </Button>
+                      <span className="w-5 text-center">{item.quantity}</span>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
+                      >
+                        <Plus size={12} />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="destructive"
+                        onClick={() => removeFromCart(item.id)}
+                      >
+                        <Trash2 size={12} />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <DrawerFooter>
+            {cart.length > 0 && (
+              <div className="p-4 border-t text-sm">
+                <div className="flex justify-between mb-3">
+                  <span className="font-medium">Subtotal:</span>
+                  <span className="font-semibold">
+                    R$ {subtotal.toFixed(2)}
+                  </span>
+                </div>
+
+                <Button
+                  className="w-full bg-green-600 hover:bg-green-700 text-white"
+                  onClick={() => {
+                    closeCart();
+                    router.push('/checkout');
+                  }}
+                >
+                  Ir para o checkout
+                </Button>
+              </div>
+            )}
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </header>
   );
 }
