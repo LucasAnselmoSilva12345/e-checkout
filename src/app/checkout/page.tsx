@@ -10,11 +10,21 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
+import { useCheckout } from '@/lib/checkoutContext';
 
 export default function CheckoutPage() {
   const { cart } = useCard();
   const { user } = useAuth();
   const router = useRouter();
+
+  const {
+    setCustomer,
+    setShipping,
+    setPaymentMethod,
+    setCardData,
+    setCart,
+    finalizeCheckout,
+  } = useCheckout();
 
   const [shippingInfo, setShippingInfo] = useState({
     address: '',
@@ -28,7 +38,7 @@ export default function CheckoutPage() {
   });
 
   const [shippingCalculated, setShippingCalculated] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'pix' | 'card'>('pix');
+  const [payment, setPayment] = useState<'pix' | 'card'>('pix');
 
   const [cardInfo, setCardInfo] = useState({
     number: '',
@@ -52,8 +62,32 @@ export default function CheckoutPage() {
   }
 
   function handleFinishPurchase() {
-    alert('Compra finalizada com sucesso');
-    router.push('/');
+    setCustomer({
+      name: user?.name || '',
+      email: user?.email || '',
+      cpf: (document.getElementById('cpf') as HTMLInputElement)?.value || '',
+      phone:
+        (document.getElementById('phone') as HTMLInputElement)?.value || '',
+    });
+
+    setShipping({
+      ...shippingInfo,
+      shippingInfo: 'Frete grátis - entrega em até 20 dias úteis',
+    });
+
+    setPaymentMethod(payment);
+
+    if (payment === 'card') {
+      setCardData(cardInfo);
+    }
+
+    setCart(cart, {
+      subtotal,
+      discount,
+      total,
+    });
+
+    finalizeCheckout();
   }
 
   return (
@@ -245,7 +279,7 @@ export default function CheckoutPage() {
           <CardContent className="space-y-4">
             <RadioGroup
               defaultValue="pix"
-              onValueChange={(val) => setPaymentMethod(val as 'pix' | 'card')}
+              onValueChange={(val) => setPayment(val as 'pix' | 'card')}
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="card" id="card" />
@@ -257,7 +291,7 @@ export default function CheckoutPage() {
               </div>
             </RadioGroup>
 
-            {paymentMethod === 'card' && (
+            {payment === 'card' && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 <div>
                   <Label htmlFor="number">Número do cartão</Label>
