@@ -1,92 +1,170 @@
 'use client';
 
 import { useState } from 'react';
-import { Label } from '@/components/ui/label';
+import {
+  FieldGroup,
+  FieldSet,
+  FieldLegend,
+  FieldDescription,
+  Field,
+  FieldLabel,
+  FieldSeparator,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Card } from '@/components/ui/card';
 
 interface PaymentFormProps {
   onFinish: (method: 'pix' | 'card', cardData?: any) => void;
 }
 
 export function PaymentForm({ onFinish }: PaymentFormProps) {
-  const [method, setMethod] = useState<'pix' | 'card'>('pix');
+  const [method, setMethod] = useState<'pix' | 'card'>('card');
   const [card, setCard] = useState({
-    number: '',
-    expiry: '',
-    cvv: '',
-    cpf: '',
     name: '',
-    lastName: '',
+    number: '',
+    expiryMonth: '',
+    expiryYear: '',
+    cvv: '',
     installments: 1,
   });
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Pagamento</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <RadioGroup
-          defaultValue="pix"
-          onValueChange={(val) => setMethod(val as 'pix' | 'card')}
-        >
+      <FieldGroup>
+      <FieldSet>
+        <FieldLegend>Método de Pagamento</FieldLegend>
+        <FieldDescription>Transações seguras e criptografadas</FieldDescription>
+
+        <RadioGroup defaultValue="card" onValueChange={(val) => setMethod(val as 'pix' | 'card')}>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="card" id="card" />
-            <Label htmlFor="card">Cartão de crédito</Label>
+            <FieldLabel htmlFor="card" className="cursor-pointer">
+              Cartão de crédito
+            </FieldLabel>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="pix" id="pix" />
-            <Label htmlFor="pix">Pix</Label>
+            <FieldLabel htmlFor="pix" className="cursor-pointer">
+              Pix
+            </FieldLabel>
           </div>
         </RadioGroup>
 
         {method === 'card' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            {Object.entries(card).map(([key, value]) =>
-              key === 'installments' ? (
-                <div key={key}>
-                  <Label htmlFor={key}>Parcelas</Label>
-                  <select
-                    id={key}
-                    className="border rounded p-2 w-full"
-                    value={value}
-                    onChange={(e) =>
-                      setCard({ ...card, installments: Number(e.target.value) })
-                    }
-                  >
-                    {[...Array(10)].map((_, i) => (
-                      <option key={i} value={i + 1}>
-                        {i + 1}x sem juros
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ) : (
-                <div key={key}>
-                  <Label htmlFor={key}>{key}</Label>
-                  <Input
-                    id={key}
-                    value={value as string}
-                    onChange={(e) =>
-                      setCard((prev) => ({ ...prev, [key]: e.target.value }))
-                    }
-                  />
-                </div>
-              )
-            )}
-          </div>
-        )}
+          <FieldGroup className="mt-4 space-y-4">
+            <Field>
+              <FieldLabel htmlFor="name">Nome no Cartão</FieldLabel>
+              <Input
+                id="name"
+                placeholder="Evil Rabbit"
+                value={card.name}
+                onChange={(e) => setCard({ ...card, name: e.target.value })}
+                required
+              />
+            </Field>
 
-        <Button
-          className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white"
-          onClick={() => onFinish(method, card)}
-        >
-          Finalizar compra
+            <Field>
+              <FieldLabel htmlFor="number">Número do Cartão</FieldLabel>
+              <Input
+                id="number"
+                placeholder="1234 5678 9012 3456"
+                value={card.number}
+                onChange={(e) => setCard({ ...card, number: e.target.value })}
+                required
+              />
+              <FieldDescription>Digite o número do seu cartão</FieldDescription>
+            </Field>
+
+            <div className="grid grid-cols-3 gap-4">
+              <Field>
+                <FieldLabel htmlFor="expiryMonth">Mês</FieldLabel>
+                <Select
+                  value={card.expiryMonth}
+                  onValueChange={(val) => setCard({ ...card, expiryMonth: val })}
+                >
+                  <SelectTrigger id="expiryMonth">
+                    <SelectValue placeholder="MM" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <SelectItem key={i + 1} value={(i + 1).toString().padStart(2, '0')}>
+                        {(i + 1).toString().padStart(2, '0')}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+
+              <Field>
+                <FieldLabel htmlFor="expiryYear">Ano</FieldLabel>
+                <Select
+                  value={card.expiryYear}
+                  onValueChange={(val) => setCard({ ...card, expiryYear: val })}
+                >
+                  <SelectTrigger id="expiryYear">
+                    <SelectValue placeholder="YYYY" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 6 }, (_, i) => {
+                      const year = new Date().getFullYear() + i;
+                      return (
+                        <SelectItem key={year} value={year.toString()}>
+                          {year}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </Field>
+
+              <Field>
+                <FieldLabel htmlFor="cvv">CVV</FieldLabel>
+                <Input
+                  id="cvv"
+                  placeholder="123"
+                  value={card.cvv}
+                  onChange={(e) => setCard({ ...card, cvv: e.target.value })}
+                  required
+                />
+              </Field>
+            </div>
+
+            <Field>
+              <FieldLabel htmlFor="installments">Parcelas</FieldLabel>
+              <Select
+                value={card.installments.toString()}
+                onValueChange={(val) => setCard({ ...card, installments: Number(val) })}
+              >
+                <SelectTrigger id="installments">
+                  <SelectValue placeholder="1x" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 10 }, (_, i) => (
+                    <SelectItem key={i + 1} value={(i + 1).toString()}>
+                      {i + 1}x sem juros
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+          </FieldGroup>
+        )}
+      </FieldSet>
+
+      <FieldSeparator />
+
+      <Field orientation="horizontal">
+        <Button type="button" onClick={() => onFinish(method, card)}>
+          Finalizar Compra
         </Button>
-      </CardContent>
+        <Button variant="outline" type="button">
+          Cancelar
+        </Button>
+      </Field>
+    </FieldGroup>
     </Card>
   );
 }
