@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
+import { useRouter } from 'next/navigation';
 
 interface PaymentFormProps {
   onFinish: (method: 'pix' | 'card', cardData?: PaymentData) => void;
@@ -18,6 +20,8 @@ interface PaymentFormProps {
 
 export function PaymentForm({ onFinish }: PaymentFormProps) {
   const [method, setMethod] = useState<'pix' | 'card'>('card');
+  const [pixDialogOpen, setPixDialogOpen] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -47,6 +51,12 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
     onFinish(method, data);
   };
 
+  const handlePixConfirm = () => {
+    setPixDialogOpen(false);
+    onFinish('pix');
+    router.push('/pending-payment');
+  };
+
   const formatCPF = (value: string) => {
     return value
       .replace(/\D/g, '')
@@ -69,7 +79,14 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
       <Card className="p-4">
         <div>
           <Label>Método de Pagamento</Label>
-          <RadioGroup value={method} onValueChange={(val) => setMethod(val as 'pix' | 'card')}>
+          <RadioGroup 
+            value={method} 
+            onValueChange={(val) => {
+              setMethod(val as 'pix' | 'card');
+              if(val === 'pix') {
+                setPixDialogOpen(true)
+              }
+            }}>
             <div className="flex gap-4 mt-2">
               <div>
                 <RadioGroupItem value="card" id="card" />
@@ -216,17 +233,36 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
               {errors.installments && <p className="text-red-500 text-sm">{errors.installments.message}</p>}
             </div>
 
+            <div className="mt-4 flex gap-2">
+              <Button type="submit" disabled={method === 'card' && !isValid}>
+                Finalizar Compra
+              </Button>
+              <Button variant="outline" type="button">
+                Cancelar
+              </Button>
+            </div>
           </div>
         )}
 
-        <div className="mt-4 flex gap-2">
-          <Button type="submit" disabled={method === 'card' && !isValid}>
-            Finalizar Compra
-          </Button>
-          <Button variant="outline" type="button">
-            Cancelar
-          </Button>
-        </div>
+        <Dialog open={pixDialogOpen} onOpenChange={setPixDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>PIX - Pagamento</DialogTitle>
+              <DialogDescription>
+                Faça o pagamento via PIX usando o QR code abaixo. Depois clique em "Confirmei o PIX".
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex justify-center my-4">
+              <div className="w-48 h-48 bg-gray-200 flex items-center justify-center">
+                QR CODE DEMONSTRATIVO
+              </div>
+            </div>
+            <DialogFooter className="flex justify-between">
+              <Button variant="outline" onClick={() => setPixDialogOpen(false)}>Cancelar</Button>
+              <Button onClick={handlePixConfirm}>Confirmei o PIX</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </Card>
     </form>
   );
