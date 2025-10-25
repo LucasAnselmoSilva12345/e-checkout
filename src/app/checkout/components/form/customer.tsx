@@ -55,25 +55,25 @@ export function CustomerForm({ user }: CustomerFormProps) {
 
   const formatPhone = (value: string) => {
   return value
-    .replace(/\D/g, '') // Remove tudo que não é número
-    .replace(/^(\d{2})(\d)/, '($1) $2') // Coloca os parênteses no DDD
-    .replace(/(\d{5})(\d{4})$/, '$1-$2') // Adiciona o hífen antes dos últimos 4 dígitos
-    .slice(0, 15); // Limita o tamanho máximo: (XX) XXXXX-XXXX
+    .replace(/\D/g, '')
+    .replace(/^(\d{2})(\d)/, '($1) $2')
+    .replace(/(\d{5})(\d{4})$/, '$1-$2')
+    .slice(0, 15);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <CardHeader>
-          <CardTitle>Identificação</CardTitle>
-          <p className="text-sm text-muted-foreground">
+          <CardTitle className='text-neutral-800 text-base font-semibold'>Identificação</CardTitle>
+          <p className="text-sm text-neutral-500">
             Utilizaremos seu e-mail para identificar seu perfil e histórico de compra.
           </p>
         </CardHeader>
 
         <CardContent className="space-y-4">
           <div>
-            <Label htmlFor="name">Nome completo</Label>
+            <Label htmlFor="name" className='text-neutral-800 text-sm font-medium'>Nome completo</Label>
             <Input
               id="name"
               placeholder="Seu nome"
@@ -93,7 +93,7 @@ export function CustomerForm({ user }: CustomerFormProps) {
           </div>
 
           <div>
-            <Label htmlFor="email">E-mail</Label>
+            <Label htmlFor="email" className='text-neutral-800 text-sm font-medium'>E-mail</Label>
             <Input
               id="email"
               type="email"
@@ -114,7 +114,7 @@ export function CustomerForm({ user }: CustomerFormProps) {
           </div>
 
           <div>
-            <Label htmlFor="cpf">CPF</Label>
+            <Label htmlFor="cpf" className='text-neutral-800 text-sm font-medium'>CPF</Label>
             <Input
               id="cpf"
               placeholder="000.000.000-00"
@@ -135,7 +135,7 @@ export function CustomerForm({ user }: CustomerFormProps) {
           </div>
 
           <div>
-            <Label htmlFor="phone">Celular / WhatsApp</Label>
+            <Label htmlFor="phone" className='text-neutral-800 text-sm font-medium'>Celular / WhatsApp</Label>
             <Input
               id="phone"
               placeholder="(11) 90000-0000"

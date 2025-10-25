@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 interface ShippingFormProps {
   onSave: (data: any) => void;
@@ -48,13 +49,20 @@ export function ShippingForm({ onSave }: ShippingFormProps) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <CardHeader>
-          <CardTitle>Entrega</CardTitle>
-          <p>Cadastre um endereço</p>
+          <CardTitle className="text-neutral-800 text-base font-semibold">
+            Entrega
+          </CardTitle>
+          <p className="text-sm text-neutral-500">Cadastre um endereço</p>
         </CardHeader>
 
         <CardContent className="space-y-4">
           <div>
-            <Label htmlFor="zip">CEP</Label>
+            <Label
+              className="text-neutral-800 text-sm font-medium"
+              htmlFor="zip"
+            >
+              CEP
+            </Label>
             <Input
               id="zip"
               placeholder="00000-000"
@@ -75,7 +83,12 @@ export function ShippingForm({ onSave }: ShippingFormProps) {
           </div>
 
           <div>
-            <Label htmlFor="address">Endereço</Label>
+            <Label
+              className="text-neutral-800 text-sm font-medium"
+              htmlFor="address"
+            >
+              Endereço
+            </Label>
             <Input
               id="address"
               placeholder="Rua Exemplo"
@@ -95,29 +108,67 @@ export function ShippingForm({ onSave }: ShippingFormProps) {
             )}
           </div>
 
-          <div>
-            <Label htmlFor="number">Número</Label>
-            <Input
-              id="number"
-              placeholder="123"
-              {...register('number')}
-              className={`${
-                errors.number
-                  ? 'border-red-500'
-                  : watch('number')
-                  ? 'border-green-500'
-                  : ''
-              }`}
-            />
-            {errors.number && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.number.message}
-              </p>
-            )}
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <Label
+                className="text-neutral-800 text-sm font-medium"
+                htmlFor="number"
+              >
+                Número
+              </Label>
+              <Input
+                id="number"
+                placeholder="123"
+                {...register('number')}
+                className={`${
+                  errors.number
+                    ? 'border-red-500'
+                    : watch('number')
+                    ? 'border-green-500'
+                    : ''
+                }`}
+              />
+              {errors.number && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.number.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label
+                className="text-neutral-800 text-sm font-medium"
+                htmlFor="neighborhood"
+              >
+                Bairro
+              </Label>
+              <Input
+                id="neighborhood"
+                placeholder="Bairro"
+                {...register('neighborhood')}
+                className={`${
+                  errors.neighborhood
+                    ? 'border-red-500'
+                    : watch('neighborhood')
+                    ? 'border-green-500'
+                    : ''
+                }`}
+              />
+              {errors.neighborhood && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.neighborhood.message}
+                </p>
+              )}
+            </div>
           </div>
 
           <div>
-            <Label htmlFor="complement">Complemento</Label>
+            <Label
+              className="text-neutral-800 text-sm font-medium"
+              htmlFor="complement"
+            >
+              Complemento
+            </Label>
             <Input
               id="complement"
               placeholder="Apto, bloco, etc."
@@ -125,76 +176,68 @@ export function ShippingForm({ onSave }: ShippingFormProps) {
             />
           </div>
 
-          <div>
-            <Label htmlFor="neighborhood">Bairro</Label>
-            <Input
-              id="neighborhood"
-              placeholder="Bairro"
-              {...register('neighborhood')}
-              className={`${
-                errors.neighborhood
-                  ? 'border-red-500'
-                  : watch('neighborhood')
-                  ? 'border-green-500'
-                  : ''
-              }`}
-            />
-            {errors.neighborhood && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.neighborhood.message}
-              </p>
-            )}
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <Label
+                className="text-neutral-800 text-sm font-medium"
+                htmlFor="city"
+              >
+                Cidade
+              </Label>
+              <Input
+                id="city"
+                placeholder="Cidade"
+                {...register('city')}
+                className={`${
+                  errors.city
+                    ? 'border-red-500'
+                    : watch('city')
+                    ? 'border-green-500'
+                    : ''
+                }`}
+              />
+              {errors.city && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.city.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <Label
+                className="text-neutral-800 text-sm font-medium"
+                htmlFor="state"
+              >
+                Estado (UF)
+              </Label>
+              <Input
+                id="state"
+                placeholder="SP"
+                maxLength={2}
+                {...register('state')}
+                className={`uppercase ${
+                  errors.state
+                    ? 'border-red-500'
+                    : watch('state')
+                    ? 'border-green-500'
+                    : ''
+                }`}
+              />
+              {errors.state && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.state.message}
+                </p>
+              )}
+            </div>
           </div>
 
-          <div>
-            <Label htmlFor="city">Cidade</Label>
-            <Input
-              id="city"
-              placeholder="Cidade"
-              {...register('city')}
-              className={`${
-                errors.city
-                  ? 'border-red-500'
-                  : watch('city')
-                  ? 'border-green-500'
-                  : ''
-              }`}
-            />
-            {errors.city && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.city.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="state">Estado (UF)</Label>
-            <Input
-              id="state"
-              placeholder="SP"
-              maxLength={2}
-              {...register('state')}
-              className={`uppercase ${
-                errors.state
-                  ? 'border-red-500'
-                  : watch('state')
-                  ? 'border-green-500'
-                  : ''
-              }`}
-            />
-            {errors.state && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.state.message}
-              </p>
-            )}
-          </div>
+          <Separator />
 
           {!calculated ? (
             <Button
               type="submit"
-              className={`mt-4 ${
+              className={`${
                 isValid
-                  ? 'bg-green-600 hover:bg-green-700 text-white'
+                  ? 'bg-green-500 hover:bg-green-700 text-white'
                   : 'bg-gray-400 cursor-not-allowed'
               }`}
               disabled={!isValid}
@@ -203,7 +246,7 @@ export function ShippingForm({ onSave }: ShippingFormProps) {
             </Button>
           ) : (
             <p className="text-sm text-green-600 font-medium mt-2">
-              Frete grátis - entrega em até 20 dias úteis 🚚
+              Frete grátis - entrega em até 20 dias úteis
             </p>
           )}
         </CardContent>

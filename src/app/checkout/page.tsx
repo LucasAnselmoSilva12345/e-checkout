@@ -48,15 +48,13 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen py-10">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
+      <div className='grid gap-4 lg:grid-cols-3'>
+        <div className='space-y-4'>
           <CustomerForm user={user} />
           <ShippingForm onSave={(data) => setShipping(data)} />
-          <PaymentForm onFinish={handleFinish} />
         </div>
-        <div>
-          <OrderSummary />
-        </div>
+        <PaymentForm onFinish={handleFinish} />
+        <OrderSummary />
       </div>
     </div>
   );

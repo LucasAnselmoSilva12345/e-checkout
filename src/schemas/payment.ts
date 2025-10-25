@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 export const paymentSchema = z.object({
   name: z.string().min(3, 'Informe o nome'),
-  lastName: z.string().min(2, 'Informe o sobrenome'),
   number: z
     .string()
     .regex(/^\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/, 'Número do cartão inválido (16 dígitos)'),
