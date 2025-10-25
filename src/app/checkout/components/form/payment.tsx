@@ -27,6 +27,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
+import QRCodeGenerator from '../qrcode-generator';
 
 interface PaymentFormProps {
   onFinish: (method: 'pix' | 'card', cardData?: PaymentData) => void;
@@ -338,22 +339,28 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
         <Dialog open={pixDialogOpen} onOpenChange={setPixDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>PIX - Pagamento</DialogTitle>
+              <DialogTitle className="text-neutral-800 text-base">
+                Faça o pagamento via PIX usando o QRCode abaixo
+              </DialogTitle>
               <DialogDescription>
-                Faça o pagamento via PIX usando o QR code abaixo. Depois clique
-                em "Confirmei o PIX".
+                Depois clique em "PIX realizado"
               </DialogDescription>
             </DialogHeader>
             <div className="flex justify-center my-4">
               <div className="w-48 h-48 bg-gray-200 flex items-center justify-center">
-                QR CODE DEMONSTRATIVO
+                <QRCodeGenerator value="https://wa.me/5511986854687" />
               </div>
             </div>
-            <DialogFooter className="flex justify-between">
+            <DialogFooter className="flex justify-center lg:justify-center">
               <Button variant="outline" onClick={() => setPixDialogOpen(false)}>
                 Cancelar
               </Button>
-              <Button onClick={handlePixConfirm}>Confirmei o PIX</Button>
+              <Button
+                onClick={handlePixConfirm}
+                className="bg-green-500 hover:bg-green-700 font-semibold"
+              >
+                PIX realizado
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
