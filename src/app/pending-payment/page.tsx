@@ -57,7 +57,7 @@ export default function PendingPayment() {
     <section className="grid lg:grid-cols-2 items-center py-10">
       <div className="space-y-4">
         <h1 className="text-5xl text-neutral-950 font-bold">Quase lá...</h1>
-        <p className="text-xl">
+        <p className="text-xl text-neutral-600">
           Pague seu Pix dentro de{' '}
           <span className="font-semibold text-purple-600">
             {formatTime(timeLeft)}
