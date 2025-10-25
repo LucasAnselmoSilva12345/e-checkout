@@ -58,10 +58,10 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
 
   const formatCreditCard = (value: string) => {
     return value
-      .replace(/\D/g, '') // Remove tudo que não é número
-      .replace(/(.{4})/g, '$1 ') // Coloca um espaço a cada 4 dígitos
-      .trim() // Remove espaço extra no final
-      .slice(0, 19); // Limita a 16 dígitos + 3 espaços
+      .replace(/\D/g, '')
+      .replace(/(.{4})/g, '$1 ')
+      .trim()
+      .slice(0, 19);
   };
 
   return (
