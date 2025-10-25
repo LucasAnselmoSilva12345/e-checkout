@@ -41,7 +41,7 @@ export function ShippingForm({ onSave }: ShippingFormProps) {
     setCalculated(true);
     onSave({
       ...data,
-      shippingInfo: 'Frete grátis - entrega em até 20 dias úteis 🚚',
+      shippingInfo: 'Frete grátis - entrega em até 20 dias úteis',
     });
   };
 

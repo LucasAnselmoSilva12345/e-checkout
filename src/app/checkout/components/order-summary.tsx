@@ -16,7 +16,7 @@ export function OrderSummary() {
   const total = subtotal - discount;
 
   return (
-    <Card>
+    <Card className="h-max">
       <CardHeader>
         <CardTitle className="text-neutral-800 text-base font-semibold">
           Resumo do pedido
