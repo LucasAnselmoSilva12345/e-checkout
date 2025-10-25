@@ -4,6 +4,7 @@ import './globals.css';
 import { AuthProvider } from '@/lib/useAuth';
 import { Header } from '@/components/Header';
 import { CartProvider } from '@/lib/cartContext';
+import { CheckoutProvider } from '@/lib/checkoutContext';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -25,10 +26,12 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <AuthProvider>
           <CartProvider>
-            <Header />
-            <main className="lg:max-w-[1330px] lg:my-0 lg:mx-auto px-4 lg:px-0">
-              {children}
-            </main>
+            <CheckoutProvider>
+              <Header />
+              <main className="lg:max-w-[1330px] lg:my-0 lg:mx-auto px-4 lg:px-0">
+                {children}
+              </main>
+            </CheckoutProvider>
           </CartProvider>
         </AuthProvider>
       </body>
