@@ -134,9 +134,13 @@ export function Header() {
 
           <Separator />
 
-          <div className="flex-1 p-4 overflow-y-auto">
+          <div
+            className={`flex-1 p-4 overflow-y-auto ${
+              cart.length === 0 ? 'flex items-center justify-center' : ''
+            }`}
+          >
             {cart.length === 0 ? (
-              <div className="space-y-4 flex flex-col items-center justify-center">
+              <div className="space-y-4 flex flex-col items-center">
                 <p className="flex items-center gap-2 text-sm text-muted-foreground">
                   <ShoppingCart />
                   Seu carrinho está vazio
