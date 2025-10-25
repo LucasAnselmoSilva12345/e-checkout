@@ -18,7 +18,16 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { Button } from './ui/button';
-import { ShoppingCart, LogOut, Minus, Plus, Trash2 } from '@geist-ui/icons';
+import {
+  ShoppingCart,
+  LogOut,
+  Minus,
+  Plus,
+  Trash2,
+  XCircle,
+} from '@geist-ui/icons';
+import { Separator } from './ui/separator';
+import Image from 'next/image';
 
 export function Header() {
   const { user, logoutUser } = useAuth();
@@ -28,7 +37,8 @@ export function Header() {
 
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const subtotal = cart.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+    (acc, item) =>
+      acc + item.price * item.quantity * (1 - item.discount_percentage / 100),
     0
   );
 
@@ -104,63 +114,97 @@ export function Header() {
         onOpenChange={(open) => (open ? openCart() : closeCart())}
       >
         <DrawerContent className="h-full w-80 ml-auto border-l bg-white shadow-lg flex flex-col">
-          <DrawerHeader>
-            <DrawerTitle>Seu carrinho</DrawerTitle>
-            <DrawerDescription>
-              Itens adicionados ao carrinho aparecerão aqui.
-            </DrawerDescription>
-
+          <DrawerHeader className="flex flex-row items-center justify-between">
+            <div>
+              <DrawerTitle>Seu carrinho</DrawerTitle>
+              <DrawerDescription>
+                Itens adicionados ao carrinho:
+              </DrawerDescription>
+            </div>
             <DrawerClose asChild>
-              <Button variant="secondary" onClick={closeCart}>
-                Fechar
+              <Button
+                className="bg-neutral-200 hover:bg-neutral-400"
+                onClick={closeCart}
+              >
+                <span className="sr-only">Fechar carrinho</span>
+                <XCircle color="#262626" />
               </Button>
             </DrawerClose>
           </DrawerHeader>
 
+          <Separator />
+
           <div className="flex-1 p-4 overflow-y-auto">
             {cart.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Nenhum item no carrinho no momento.
-              </p>
+              <div className="space-y-4 flex flex-col items-center justify-center">
+                <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <ShoppingCart />
+                  Seu carrinho está vazio
+                </p>
+
+                <Button
+                  className="w-full bg-green-600 hover:bg-green-700"
+                  onClick={() => {
+                    router.push('/collections');
+                  }}
+                >
+                  Continuar Comprando
+                </Button>
+              </div>
             ) : (
               <div className="flex flex-col gap-4">
                 {cart.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center justify-between border-b pb-2"
-                  >
-                    <div>
-                      <p>{item.title}</p>
-                      <p>R$ {(item.price * item.quantity).toFixed(2)}</p>
+                  <div key={item.id} className="border-b pb-2">
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        width={50}
+                        height={50}
+                      />
+
+                      <p className="text-sm font-medium">{item.title}</p>
                     </div>
 
-                    <div className="flex items-center gap-1">
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
-                        }
-                      >
-                        <Minus size={12} />
-                      </Button>
-                      <span className="w-5 text-center">{item.quantity}</span>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
-                        }
-                      >
-                        <Plus size={12} />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="destructive"
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        <Trash2 size={12} />
-                      </Button>
+                    <div className="flex items-center justify-between">
+                      <p className="text-base font-medium text-green-600">
+                        R$
+                        {(
+                          item.price *
+                          item.quantity *
+                          (1 - item.discount_percentage / 100)
+                        ).toFixed(2)}{' '}
+                        no pix
+                      </p>
+
+                      <div className="flex items-center gap-1">
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity - 1)
+                          }
+                        >
+                          <Minus size={12} />
+                        </Button>
+                        <span className="w-5 text-center">{item.quantity}</span>
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity + 1)
+                          }
+                        >
+                          <Plus size={12} />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="destructive"
+                          onClick={() => removeFromCart(item.id)}
+                        >
+                          <Trash2 size={12} />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -173,7 +217,7 @@ export function Header() {
               <div className="p-4 border-t text-sm">
                 <div className="flex justify-between mb-3">
                   <span className="font-medium">Subtotal:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-green-600">
                     R$ {subtotal.toFixed(2)}
                   </span>
                 </div>
