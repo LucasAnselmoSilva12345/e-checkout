@@ -5,10 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { OrderSummary } from '../checkout/components/order-summary';
+import { ContactInfo } from './components/contact-info';
+import { PaymentInfo } from './components/payment-info';
+import { AddressInfo } from './components/address-info';
 
 export default function ThankYouPage() {
   const { checkoutData } = useCheckout();
   const router = useRouter();
+
+  const whatsappLink =
+    'https://wa.me/5511986854687?text=Olá!%20Preciso%20de%20ajuda%20com%20meu%20pedido.';
 
   useEffect(() => {
     if (!checkoutData.customer || checkoutData.cart.length === 0) {
@@ -23,82 +29,38 @@ export default function ThankYouPage() {
   const { customer, shipping, paymentMethod, cardData, cart } = checkoutData;
 
   return (
-    <section className="py-10">
+    <section className="py-10 space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold mb-6">Pedido #456456 criado!</h1>
-          <p className=" text-gray-600 mb-10">
-            Obrigado por comprar conosco, <strong>{customer.name}</strong>!
-            Segue abaixo as informações do seu pedido
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold">Pedido criado!</h1>
+          <p className="text-neutral-800 font-normal text-base">
+            Obrigado por comprar conosco,{' '}
+            <span className="font-semibold">{customer.name}</span>! Em breve
+            você receberá um email com mais informações do seu pedido.
+          </p>
+          <p className="text-neutral-800 font-normal italic text-base">
+            Em caso de algum problema, entre em contato conosco através do nosso
+            canal de atendimento no{' '}
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-600 font-semibold hover:underline"
+            >
+              WhatsApp
+            </a>
+            .
           </p>
         </div>
-        <Button
-          className="bg-neutral-800 hover:bg-neutral-700 text-white"
-          onClick={() => router.push('/')}
-        >
+        <Button variant="outline" onClick={() => router.push('/collections')}>
           Voltar à loja
         </Button>
       </div>
-
-      <div className="grid lg:grid-cols-2">
-        <div className="mb-8 border rounded-xl p-5 shadow-sm bg-white">
-          <div>
-            <h3>Informações de contato</h3>
-            <p>
-              <strong>Nome:</strong> {customer.name}
-            </p>
-            <p>
-              <strong>Email:</strong> {customer.email}
-            </p>
-            <p>
-              <strong>Celular:</strong> {customer.phone}
-            </p>
-          </div>
-          <div>
-            <p>
-              <strong>Método:</strong>{' '}
-              {paymentMethod === 'card' ? 'Cartão de Crédito' : 'PIX'}
-            </p>
-
-            {paymentMethod === 'card' && cardData && (
-              <>
-                <p>
-                  <strong>Número do Cartão:</strong> **** **** ****{' '}
-                  {cardData.number.slice(-4)}
-                </p>
-                <p>
-                  <strong>Nome no Cartão:</strong> {cardData.name}
-                </p>
-                <p>
-                  <strong>CPF:</strong> {cardData.cpf}
-                </p>
-                <p>
-                  <strong>Validade:</strong> {cardData.expiry}
-                </p>
-                <p>
-                  <strong>Parcelas:</strong> {cardData.installments}x
-                </p>
-              </>
-            )}
-
-            {paymentMethod === 'pix' && (
-              <p className="text-green-700 font-medium">
-                Pagamento via PIX — confirmado ✅
-              </p>
-            )}
-          </div>
-          <div>
-            <p>
-              <strong>Endereço:</strong> {shipping?.address}, {shipping?.city} -{' '}
-              {shipping?.state}
-            </p>
-            <p>
-              <strong>CEP:</strong> {shipping?.zip}
-            </p>
-            <p>
-              <strong>Frete:</strong> {shipping?.shippingInfo}
-            </p>
-          </div>
+      <div className="grid lg:grid-cols-2 gap-6">
+        <div className="border rounded-xl p-5 shadow-sm space-y-4">
+          <ContactInfo customer={customer} />
+          <AddressInfo shipping={shipping} />
+          <PaymentInfo paymentMethod={paymentMethod} cardData={cardData} />
         </div>
 
         <OrderSummary />
