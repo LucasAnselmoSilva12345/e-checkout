@@ -8,6 +8,7 @@ import { CustomerForm } from './components/form/customer';
 import { ShippingForm } from './components/form/shipping';
 import { PaymentForm } from './components/form/payment';
 import { OrderSummary } from './components/order-summary';
+import { toast } from 'sonner';
 
 export default function CheckoutPage() {
   const { user } = useAuth();
@@ -22,30 +23,45 @@ export default function CheckoutPage() {
     finalizeCheckout,
   } = useCheckout();
 
-  function handleFinish(method: 'pix' | 'card', cardData?: any) {
-    setCustomer({
-      name: user?.name || '',
-      email: user?.email || '',
-      cpf: (document.getElementById('cpf') as HTMLInputElement)?.value || '',
-      phone:
-        (document.getElementById('phone') as HTMLInputElement)?.value || '',
-    });
+  async function handleFinish(method: 'pix' | 'card', cardData?: any) {
+    const toastId = toast.loading('Processando pagamento...');
+    try {
+      setCustomer({
+        name: user?.name || '',
+        email: user?.email || '',
+        cpf: (document.getElementById('cpf') as HTMLInputElement)?.value || '',
+        phone:
+          (document.getElementById('phone') as HTMLInputElement)?.value || '',
+      });
 
-    const subtotal = cart.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
-    const discount = 0.05 * subtotal;
-    const total = subtotal - discount;
+      const subtotal = cart.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
 
-    setCart(cart, { subtotal, discount, total });
-    setPaymentMethod(method);
-    if (method === 'card' && cardData) setCardData(cardData);
+      const discount = cart.reduce(
+        (acc, item) =>
+          acc + item.price * item.quantity * (item.discount_percentage / 100),
+        0
+      );
 
-    finalizeCheckout();
-    router.push('/thank-you');
+      const total = subtotal - discount;
+
+      setCart(cart, { subtotal, discount, total });
+      setPaymentMethod(method);
+      if (method === 'card' && cardData) setCardData(cardData);
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      finalizeCheckout();
+      toast.success('Pagamento processado com sucesso!');
+      router.push('/thank-you');
+    } catch (error) {
+      toast.error('Ocorreu um erro ao processar o pagamento.');
+    } finally {
+      toast.dismiss(toastId);
+    }
   }
-
   return (
     <section className="min-h-screen py-10">
       <div className="grid gap-4 lg:grid-cols-3">
