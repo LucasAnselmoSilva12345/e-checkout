@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/lib/useAuth';
-import { Header } from '@/components/Header';
+
 import { CartProvider } from '@/lib/cartContext';
 import { CheckoutProvider } from '@/lib/checkoutContext';
+import { Header } from '@/components/header/header';
 
 const inter = Inter({
   variable: '--font-inter',
