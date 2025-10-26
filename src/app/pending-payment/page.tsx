@@ -54,7 +54,7 @@ export default function PendingPayment() {
   };
 
   return (
-    <section className="grid lg:grid-cols-2 items-center py-10">
+    <section className="grid lg:grid-cols-2 items-center py-10 space-y-6">
       <div className="space-y-4">
         <h1 className="text-5xl text-neutral-950 font-bold">Quase lá...</h1>
         <p className="text-xl text-neutral-600">
@@ -79,7 +79,7 @@ export default function PendingPayment() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <PIXQRCode value={Number(checkoutData.totals.total.toFixed(2))} />
+            <PIXQRCode value={Number(checkoutData.totals.total)} />
           </CardContent>
         </Card>
       </div>

@@ -54,7 +54,10 @@ export default function PIXQRCode({ value }: PIXQRCodeProps) {
             <p className="text-sm text-neutral-600">
               Valor do PIX:{' '}
               <span className="text-green-600 font-semibold">
-                R$ {value.toFixed(2)}
+                {value.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
               </span>
             </p>
           </div>

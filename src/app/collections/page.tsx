@@ -7,7 +7,7 @@ import { mockProducts, Product } from '@/lib/mockProducts';
 import { useAuth } from '@/lib/useAuth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function CollectionPage() {
   const { user } = useAuth();
@@ -24,19 +24,19 @@ export default function CollectionPage() {
     return null;
   }
   return (
-    <section className="pt-5 space-y-4">
+    <section className="min-h-screen py-10 space-y-6">
       <div className="space-y-1">
         <h2 className="text-xl lg:text-2xl text-neutral-800">
-          <span className="font-bold">Sofás em promoção:</span> modular, cama, e
-          mais!
+          <span className="font-bold">Sofás em promoção:</span> modular, cama,
+          poltrona e mais!
         </h2>
         <p className="text-sm text-neutral-700">
-          Descubra ofertas imperdíveis em sofá 2 lugares, sofá 3 lugares e
-          sofá-cama. Escolha o modelo que combina com a sua decoração e
-          aproveite descontos exclusivos.
+          Descubra ofertas imperdíveis em sofás, sofá-cama e poltronas. Escolha
+          o modelo que combina com a sua decoração e aproveite descontos
+          exclusivos.
         </p>
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {mockProducts.map((product) => {
           const discount =
             product.compare_at_price && product.compare_at_price > product.price
@@ -74,21 +74,29 @@ export default function CollectionPage() {
                 <div>
                   {product.compare_at_price && (
                     <p className="text-xs text-neutral-500 line-through">
-                      R$ {product.compare_at_price.toFixed(2)}
+                      {product.compare_at_price.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
                     </p>
                   )}
                   <p className="text-base lg:text-xl text-green-500 font-semibold">
-                    R${' '}
                     {(
                       product.price *
                       (1 - product.discount_percentage / 100)
-                    ).toFixed(2)}{' '}
+                    ).toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}{' '}
                     <span className="text-xs">à vista</span>
                   </p>
                   <p className="text-sm text-neutral-700">
                     ou em até 10x de{' '}
                     <span className="font-semibold">
-                      R$ {(product.price / 10).toFixed(2)}
+                      {(product.price / 10).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
                     </span>{' '}
                     no cartão
                   </p>

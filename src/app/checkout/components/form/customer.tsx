@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { formatCPF, formatPhone } from '@/utils/formatters';
 
 interface CustomerFormProps {
   user: {
@@ -20,7 +21,7 @@ export function CustomerForm({ user }: CustomerFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors},
+    formState: { errors },
     watch,
     reset,
   } = useForm<CustomerData>({
@@ -44,36 +45,27 @@ export function CustomerForm({ user }: CustomerFormProps) {
     reset();
   };
 
-  const formatCPF = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
-      .slice(0, 14);
-  };
-
-  const formatPhone = (value: string) => {
-  return value
-    .replace(/\D/g, '')
-    .replace(/^(\d{2})(\d)/, '($1) $2')
-    .replace(/(\d{5})(\d{4})$/, '$1-$2')
-    .slice(0, 15);
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <CardHeader>
-          <CardTitle className='text-neutral-800 text-base font-semibold'>Identificação</CardTitle>
+          <CardTitle className="text-neutral-800 text-base font-semibold">
+            Identificação
+          </CardTitle>
           <p className="text-sm text-neutral-500">
-            Utilizaremos seu e-mail para identificar seu perfil e histórico de compra.
+            Utilizaremos seu e-mail para identificar seu perfil e histórico de
+            compra.
           </p>
         </CardHeader>
 
         <CardContent className="space-y-4">
           <div>
-            <Label htmlFor="name" className='text-neutral-800 text-sm font-medium'>Nome completo</Label>
+            <Label
+              htmlFor="name"
+              className="text-neutral-800 text-sm font-medium"
+            >
+              Nome completo
+            </Label>
             <Input
               id="name"
               placeholder="Seu nome"
@@ -93,7 +85,12 @@ export function CustomerForm({ user }: CustomerFormProps) {
           </div>
 
           <div>
-            <Label htmlFor="email" className='text-neutral-800 text-sm font-medium'>E-mail</Label>
+            <Label
+              htmlFor="email"
+              className="text-neutral-800 text-sm font-medium"
+            >
+              E-mail
+            </Label>
             <Input
               id="email"
               type="email"
@@ -109,12 +106,19 @@ export function CustomerForm({ user }: CustomerFormProps) {
               }`}
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
           <div>
-            <Label htmlFor="cpf" className='text-neutral-800 text-sm font-medium'>CPF</Label>
+            <Label
+              htmlFor="cpf"
+              className="text-neutral-800 text-sm font-medium"
+            >
+              CPF
+            </Label>
             <Input
               id="cpf"
               placeholder="000.000.000-00"
@@ -135,7 +139,12 @@ export function CustomerForm({ user }: CustomerFormProps) {
           </div>
 
           <div>
-            <Label htmlFor="phone" className='text-neutral-800 text-sm font-medium'>Celular / WhatsApp</Label>
+            <Label
+              htmlFor="phone"
+              className="text-neutral-800 text-sm font-medium"
+            >
+              Celular / WhatsApp
+            </Label>
             <Input
               id="phone"
               placeholder="(11) 90000-0000"
@@ -151,7 +160,9 @@ export function CustomerForm({ user }: CustomerFormProps) {
               }`}
             />
             {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.phone.message}
+              </p>
             )}
           </div>
         </CardContent>

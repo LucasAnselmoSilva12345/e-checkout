@@ -235,7 +235,7 @@ export function ShippingForm({ onSave }: ShippingFormProps) {
           {!calculated ? (
             <Button
               type="submit"
-              className={`${
+              className={`w-full ${
                 isValid
                   ? 'bg-green-500 hover:bg-green-700 text-white'
                   : 'bg-gray-400 cursor-not-allowed'

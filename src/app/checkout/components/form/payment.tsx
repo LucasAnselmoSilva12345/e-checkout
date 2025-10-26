@@ -27,6 +27,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
+import { formatCPF, formatCreditCard } from '@/utils/formatters';
 
 interface PaymentFormProps {
   onFinish: (method: 'pix' | 'card', cardData?: PaymentData) => void;
@@ -68,23 +69,6 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
     setPixDialogOpen(false);
     onFinish('pix');
     router.push('/pending-payment');
-  };
-
-  const formatCPF = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
-      .slice(0, 14);
-  };
-
-  const formatCreditCard = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(.{4})/g, '$1 ')
-      .trim()
-      .slice(0, 19);
   };
 
   return (
@@ -155,7 +139,7 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
               )}
             </div>
 
-            <div className="grid lg:grid-cols-3">
+            <div className="grid grid-cols-3 gap-2">
               <div>
                 <Label
                   className="text-neutral-800 text-sm font-medium"
@@ -167,7 +151,7 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
                   value={watch('expiryMonth')}
                   onValueChange={(val) => setValue('expiryMonth', val)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="MM" />
                   </SelectTrigger>
                   <SelectContent>
@@ -199,7 +183,7 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
                   value={watch('expiryYear')}
                   onValueChange={(val) => setValue('expiryYear', val)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="YYYY" />
                   </SelectTrigger>
                   <SelectContent>
@@ -305,7 +289,7 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
                 value={watch('installments').toString()}
                 onValueChange={(val) => setValue('installments', Number(val))}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="1x" />
                 </SelectTrigger>
                 <SelectContent>

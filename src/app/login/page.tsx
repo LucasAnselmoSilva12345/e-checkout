@@ -69,14 +69,16 @@ export default function LoginPage() {
   const passwordValue = watch('password');
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <section className="flex flex-col items-center justify-center min-h-screen">
       <Card>
         <CardHeader>
-          <CardTitle>{isLogin ? 'Entrar' : 'Criar Conta'}</CardTitle>
+          <CardTitle className="text-base font-semibold text-neutral-800">
+            <h2>{isLogin ? 'Entrar' : 'Criar Conta'}</h2>
+          </CardTitle>
           <CardDescription>Entre com o seu melhor e-mail</CardDescription>
           <CardAction>
             <Button
-              variant="link"
+              variant="outline"
               type="submit"
               onClick={() => setIsLogin(!isLogin)}
             >
@@ -89,7 +91,12 @@ export default function LoginPage() {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4 w-80 p-6 border rounded-lg"
           >
-            <Label htmlFor="email">Email</Label>
+            <Label
+              className="text-neutral-800 text-sm font-medium"
+              htmlFor="email"
+            >
+              Email
+            </Label>
             <Input
               id="email"
               type="email"
@@ -109,7 +116,12 @@ export default function LoginPage() {
               </p>
             )}
 
-            <Label htmlFor="password">Senha</Label>
+            <Label
+              className="text-neutral-800 text-sm font-medium"
+              htmlFor="password"
+            >
+              Senha
+            </Label>
             <Input
               id="password"
               type="password"
@@ -143,6 +155,6 @@ export default function LoginPage() {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </section>
   );
 }
