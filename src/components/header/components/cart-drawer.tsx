@@ -45,7 +45,7 @@ export function CartDrawer({
       <DrawerContent className="h-full w-80 ml-auto border-l bg-white shadow-lg flex flex-col">
         <DrawerHeader className="flex flex-row items-center justify-between">
           <div>
-            <DrawerTitle>Seu carrinho</DrawerTitle>
+            <DrawerTitle className="text-neutral-800">Seu carrinho</DrawerTitle>
             <DrawerDescription>
               Itens adicionados ao carrinho:
             </DrawerDescription>
@@ -99,8 +99,8 @@ export function CartDrawer({
           {cart.length > 0 && (
             <div className="p-4 border-t text-sm">
               <div className="flex justify-between mb-3">
-                <span className="font-medium">Subtotal:</span>
-                <span className="font-semibold text-green-600">
+                <span className="font-medium text-sm">Subtotal:</span>
+                <span className="font-semibold text-base text-green-600">
                   {subtotal.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',
@@ -114,7 +114,7 @@ export function CartDrawer({
                   router.push('/checkout');
                 }}
               >
-                Ir para o checkout
+                Finalizar compra
               </Button>
             </div>
           )}

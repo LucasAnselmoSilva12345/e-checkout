@@ -30,15 +30,17 @@ export default function ThankYouPage() {
 
   return (
     <section className="py-10 space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-center justify-between">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Pedido criado!</h1>
-          <p className="text-neutral-800 font-normal text-base">
+          <h2 className="text-3xl font-semibold text-neutral-800">
+            Pedido criado!
+          </h2>
+          <p className="text-neutral-700 font-normal text-base">
             Obrigado por comprar conosco,{' '}
             <span className="font-semibold">{customer.name}</span>! Em breve
             você receberá um email com mais informações do seu pedido.
           </p>
-          <p className="text-neutral-800 font-normal italic text-base">
+          <p className="text-neutral-700 font-normal italic text-base">
             Em caso de algum problema, entre em contato conosco através do nosso
             canal de atendimento no{' '}
             <a
@@ -52,9 +54,6 @@ export default function ThankYouPage() {
             .
           </p>
         </div>
-        <Button variant="outline" onClick={() => router.push('/collections')}>
-          Voltar à loja
-        </Button>
       </div>
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="border rounded-xl p-5 shadow-sm space-y-4">

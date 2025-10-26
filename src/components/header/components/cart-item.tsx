@@ -32,7 +32,7 @@ export function CartItem({
     <div className="border-b pb-2">
       <div className="flex items-center gap-2">
         <Image src={item.image} alt={item.title} width={50} height={50} />
-        <p className="text-sm font-medium">{item.title}</p>
+        <p className="text-sm font-semibold text-neutral-700">{item.title}</p>
       </div>
       <div className="flex items-center justify-between">
         <p className="text-sm lg:text-base font-medium text-green-600">

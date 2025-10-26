@@ -139,7 +139,7 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
               )}
             </div>
 
-            <div className="grid lg:grid-cols-3">
+            <div className="grid grid-cols-3 gap-2">
               <div>
                 <Label
                   className="text-neutral-800 text-sm font-medium"
@@ -151,7 +151,7 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
                   value={watch('expiryMonth')}
                   onValueChange={(val) => setValue('expiryMonth', val)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="MM" />
                   </SelectTrigger>
                   <SelectContent>
@@ -183,7 +183,7 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
                   value={watch('expiryYear')}
                   onValueChange={(val) => setValue('expiryYear', val)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="YYYY" />
                   </SelectTrigger>
                   <SelectContent>
@@ -289,7 +289,7 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
                 value={watch('installments').toString()}
                 onValueChange={(val) => setValue('installments', Number(val))}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="1x" />
                 </SelectTrigger>
                 <SelectContent>
