@@ -12,7 +12,13 @@ export function OrderSummary() {
     (acc, item) => acc + item.price * item.quantity,
     0
   );
-  const discount = subtotal * 0.05;
+
+  const discount = cart.reduce(
+    (acc, item) =>
+      acc + item.price * item.quantity * (item.discount_percentage / 100),
+    0
+  );
+
   const total = subtotal - discount;
 
   return (
