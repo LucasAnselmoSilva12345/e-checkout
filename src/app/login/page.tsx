@@ -69,7 +69,7 @@ export default function LoginPage() {
   const passwordValue = watch('password');
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <section className="flex flex-col items-center justify-center min-h-screen">
       <Card>
         <CardHeader>
           <CardTitle className="text-base font-semibold text-neutral-800">
@@ -155,6 +155,6 @@ export default function LoginPage() {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </section>
   );
 }

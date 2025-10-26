@@ -54,7 +54,7 @@ export default function PendingPayment() {
   };
 
   return (
-    <section className="grid lg:grid-cols-2 items-center py-10">
+    <section className="grid lg:grid-cols-2 items-center py-10 space-y-6">
       <div className="space-y-4">
         <h1 className="text-5xl text-neutral-950 font-bold">Quase lá...</h1>
         <p className="text-xl text-neutral-600">
