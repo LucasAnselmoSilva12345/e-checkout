@@ -24,7 +24,12 @@ export default function CheckoutPage() {
   } = useCheckout();
 
   async function handleFinish(method: 'pix' | 'card', cardData?: any) {
-    const toastId = toast.loading('Processando pagamento...');
+    const toastMessage =
+      method === 'pix'
+        ? 'Gerando QR Code PIX...'
+        : 'Processando pagamento com cartão...';
+    const toastId = toast.loading(toastMessage);
+
     try {
       setCustomer({
         name: user?.name || '',
@@ -54,8 +59,18 @@ export default function CheckoutPage() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       finalizeCheckout();
-      toast.success('Pagamento processado com sucesso!');
-      router.push('/thank-you');
+
+      toast.success(
+        method === 'pix'
+          ? 'QR Code gerado com sucesso!'
+          : 'Pagamento processado com sucesso!'
+      );
+
+      if (method === 'card') {
+        router.push('/thank-you');
+      } else if (method === 'pix') {
+        router.push('/pending-payment');
+      }
     } catch (error) {
       toast.error('Ocorreu um erro ao processar o pagamento.');
     } finally {
