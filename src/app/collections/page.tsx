@@ -1,6 +1,5 @@
 'use client';
 
-import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCard } from '@/lib/cartContext';
@@ -9,53 +8,6 @@ import { useAuth } from '@/lib/useAuth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-
-export const metadata: Metadata = {
-  title: 'Coleção de Sofás em Promoção | E-Checkout',
-  description:
-    'Encontre sofás, sofás-cama e poltronas com até 50% de desconto na E-Checkout. Conforto, qualidade e design para transformar sua sala de estar.',
-  keywords: [
-    'sofás',
-    'sofá-cama',
-    'poltronas',
-    'promoção de sofá',
-    'sofá retrátil',
-    'sofá reclinável',
-    'E-Checkout',
-    'loja de móveis online',
-  ],
-  openGraph: {
-    title: 'Coleção de Sofás em Promoção | E-Checkout',
-    description:
-      'Descubra sofás, sofás-cama e poltronas em promoção. A E-Checkout oferece conforto, estilo e entrega rápida em todo o Brasil.',
-    url: 'https://www.echeckout.com.br/collections',
-    siteName: 'E-Checkout',
-    locale: 'pt_BR',
-    type: 'website',
-    images: [
-      {
-        url: 'https://www.echeckout.com.br/og-collections.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Coleção de Sofás e Poltronas E-Checkout',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Coleção de Sofás em Promoção | E-Checkout',
-    description:
-      'As melhores ofertas em sofás, sofás-cama e poltronas. Conforto e qualidade com os melhores preços da E-Checkout.',
-    images: ['https://www.echeckout.com.br/og-collections.jpg'],
-  },
-  alternates: {
-    canonical: 'https://www.echeckout.com.br/collections',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
 
 export default function CollectionPage() {
   const { user } = useAuth();
@@ -122,21 +74,29 @@ export default function CollectionPage() {
                 <div>
                   {product.compare_at_price && (
                     <p className="text-xs text-neutral-500 line-through">
-                      R$ {product.compare_at_price.toFixed(2)}
+                      {product.compare_at_price.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
                     </p>
                   )}
                   <p className="text-base lg:text-xl text-green-500 font-semibold">
-                    R${' '}
                     {(
                       product.price *
                       (1 - product.discount_percentage / 100)
-                    ).toFixed(2)}{' '}
+                    ).toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}{' '}
                     <span className="text-xs">à vista</span>
                   </p>
                   <p className="text-sm text-neutral-700">
                     ou em até 10x de{' '}
                     <span className="font-semibold">
-                      R$ {(product.price / 10).toFixed(2)}
+                      {(product.price / 10).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      })}
                     </span>{' '}
                     no cartão
                   </p>

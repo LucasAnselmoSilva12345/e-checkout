@@ -79,7 +79,7 @@ export default function PendingPayment() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <PIXQRCode value={Number(checkoutData.totals.total.toFixed(2))} />
+            <PIXQRCode value={Number(checkoutData.totals.total)} />
           </CardContent>
         </Card>
       </div>

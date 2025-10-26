@@ -101,7 +101,10 @@ export function CartDrawer({
               <div className="flex justify-between mb-3">
                 <span className="font-medium">Subtotal:</span>
                 <span className="font-semibold text-green-600">
-                  R$ {subtotal.toFixed(2)}
+                  {subtotal.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
                 </span>
               </div>
               <Button

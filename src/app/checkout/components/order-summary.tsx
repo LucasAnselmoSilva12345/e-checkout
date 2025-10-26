@@ -37,7 +37,10 @@ export function OrderSummary() {
                 {item.title} × {item.quantity}
               </span>
               <span className="font-bold">
-                R$ {(item.price * item.quantity).toFixed(2)}
+                {(item.price * item.quantity).toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
               </span>
             </div>
           </div>
@@ -45,16 +48,32 @@ export function OrderSummary() {
         <Separator />
         <div className="flex justify-between text-sm">
           <span>Subtotal</span>
-          <span>R$ {subtotal.toFixed(2)}</span>
+          <span>
+            {subtotal.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            })}
+          </span>
         </div>
         <div className="flex justify-between text-sm">
           <span>Desconto</span>
-          <span className="text-green-600">- R$ {discount.toFixed(2)}</span>
+          <span className="text-green-600">
+            -{' '}
+            {discount.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            })}
+          </span>
         </div>
         <Separator />
         <div className="flex justify-between font-semibold text-green-600">
           <span>Total</span>
-          <span>R$ {total.toFixed(2)}</span>
+          <span>
+            {total.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            })}
+          </span>
         </div>
       </CardContent>
     </Card>
