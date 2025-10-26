@@ -27,6 +27,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
+import { formatCPF, formatCreditCard } from '@/utils/formatters';
 
 interface PaymentFormProps {
   onFinish: (method: 'pix' | 'card', cardData?: PaymentData) => void;
@@ -68,23 +69,6 @@ export function PaymentForm({ onFinish }: PaymentFormProps) {
     setPixDialogOpen(false);
     onFinish('pix');
     router.push('/pending-payment');
-  };
-
-  const formatCPF = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
-      .slice(0, 14);
-  };
-
-  const formatCreditCard = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(.{4})/g, '$1 ')
-      .trim()
-      .slice(0, 19);
   };
 
   return (
