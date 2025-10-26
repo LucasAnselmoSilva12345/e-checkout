@@ -3,7 +3,6 @@
 import { useCheckout } from '@/lib/checkoutContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { OrderSummary } from '../checkout/components/order-summary';
 import { ContactInfo } from './components/contact-info';
 import { PaymentInfo } from './components/payment-info';
@@ -30,7 +29,7 @@ export default function ThankYouPage() {
 
   return (
     <section className="py-10 space-y-6">
-      <div className="flex flex-col items-center justify-between">
+      <div>
         <div className="space-y-2">
           <h2 className="text-3xl font-semibold text-neutral-800">
             Pedido criado!
@@ -56,7 +55,7 @@ export default function ThankYouPage() {
         </div>
       </div>
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="border rounded-xl p-5 shadow-sm space-y-4">
+        <div className="border rounded-xl p-5 shadow-sm space-y-4 h-max">
           <ContactInfo customer={customer} />
           <AddressInfo shipping={shipping} />
           <PaymentInfo paymentMethod={paymentMethod} cardData={cardData} />

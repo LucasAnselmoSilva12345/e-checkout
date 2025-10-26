@@ -29,6 +29,7 @@ const loginSchema = z.object({
     .regex(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
     .regex(/\d/, 'A senha deve conter pelo menos um número')
     .regex(/[!?#!]/, 'A senha deve conter pelo menos um dos caracteres: ! ? #'),
+  name: z.string().min(2, 'O nome deve ter no mínimo 2 caracteres').optional(),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -59,7 +60,7 @@ export default function LoginPage() {
     if (isLogin) {
       loginUser(data.email, data.password);
     } else {
-      signupUser(data.email, data.password);
+      signupUser(data.email, data.password, data.name);
     }
     reset();
     router.push('/collections');
@@ -91,6 +92,28 @@ export default function LoginPage() {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4 w-80 p-6 border rounded-lg"
           >
+            {!isLogin && (
+              <>
+                <Label
+                  className="text-neutral-800 text-sm font-medium"
+                  htmlFor="name"
+                >
+                  Nome
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Seu nome completo"
+                  {...register('name', { required: !isLogin })}
+                />
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.name.message}
+                  </p>
+                )}
+              </>
+            )}
+
             <Label
               className="text-neutral-800 text-sm font-medium"
               htmlFor="email"

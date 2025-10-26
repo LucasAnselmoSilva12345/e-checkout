@@ -6,7 +6,7 @@ import { User, getCurrentUser, login, signup, logout } from './auth';
 type AuthContextType = {
   user: User | null;
   loginUser: (email: string, password: string) => void;
-  signupUser: (email: string, password: string) => void;
+  signupUser: (email: string, password: string, name?: string) => void;
   logoutUser: () => void;
 };
 
@@ -29,8 +29,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  function signupUser(email: string, password: string) {
-    const user = signup(email, password);
+  function signupUser(email: string, password: string, name?: string) {
+    const user = signup(email, password, name);
     setUser(user);
   }
 

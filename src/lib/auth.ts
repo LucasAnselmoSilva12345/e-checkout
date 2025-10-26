@@ -6,7 +6,7 @@ export type User = {
 
 const STORAGE_KEY = 'mock_user';
 
-export function login(email: string, password: string): User | any {
+export function login(email: string, password: string): User {
   const mockUser: User = {
     id: '1',
     email,
@@ -16,10 +16,11 @@ export function login(email: string, password: string): User | any {
   return mockUser;
 }
 
-export function signup(email: string, password: string): User | any {
+export function signup(email: string, password: string, name?: string): User {
   const newUser: User = {
     id: crypto.randomUUID(),
     email,
+    name,
   };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(newUser));
   return newUser;
