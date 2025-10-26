@@ -21,7 +21,7 @@ export default function PaymentFailed() {
   }
 
   return (
-    <section className="py-20 text-center">
+    <section className="py-10 text-center">
       <div className="space-y-4 flex flex-col items-center justify-center">
         <h1 className="text-5xl text-neutral-950 font-bold">
           Ops! Seu Pix expirou :(

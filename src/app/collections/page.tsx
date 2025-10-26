@@ -24,7 +24,7 @@ export default function CollectionPage() {
     return null;
   }
   return (
-    <section className="pt-5 space-y-4">
+    <section className="min-h-screen py-10 space-y-6">
       <div className="space-y-1">
         <h2 className="text-xl lg:text-2xl text-neutral-800">
           <span className="font-bold">Sofás em promoção:</span> modular, cama,
