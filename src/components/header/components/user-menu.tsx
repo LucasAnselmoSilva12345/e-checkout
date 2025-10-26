@@ -21,7 +21,7 @@ export function UserMenu({ user, logoutUser }: UserMenuProps) {
 
   return (
     <HoverCard>
-      <HoverCardTrigger asChild>
+      <HoverCardTrigger asChild className="hidden md:block">
         <Button variant="link" className="px-2 text-sm font-normal">
           Olá,{' '}
           <span className="font-semibold">{user?.name ?? user?.email}</span>
