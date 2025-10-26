@@ -6,6 +6,7 @@ import { AuthProvider } from '@/lib/useAuth';
 import { CartProvider } from '@/lib/cartContext';
 import { CheckoutProvider } from '@/lib/checkoutContext';
 import { Header } from '@/components/header/header';
+import { Toaster } from 'sonner';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -78,6 +79,7 @@ export default function RootLayout({
               <main className="lg:max-w-[1330px] lg:my-0 lg:mx-auto px-4 lg:px-0">
                 {children}
               </main>
+              <Toaster />
             </CheckoutProvider>
           </CartProvider>
         </AuthProvider>

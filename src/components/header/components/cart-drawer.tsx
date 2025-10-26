@@ -13,6 +13,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { ShoppingCart, XCircle } from '@geist-ui/icons';
 import { CartItem } from './cart-item';
+import { toast } from 'sonner';
 
 type CartDrawerProps = {
   cart: any[];
@@ -35,6 +36,17 @@ export function CartDrawer({
       acc + item.price * item.quantity * (1 - item.discount_percentage / 100),
     0
   );
+
+  const handleCheckout = () => {
+    const toastId = toast.loading('Redirecionando para o checkout...');
+
+    setTimeout(() => {
+      toast.success('Você está sendo redirecionado');
+      closeCart();
+      router.push('/checkout');
+      toast.dismiss(toastId);
+    }, 1500);
+  };
 
   return (
     <Drawer
@@ -109,10 +121,7 @@ export function CartDrawer({
               </div>
               <Button
                 className="w-full bg-green-600 hover:bg-green-700 text-white"
-                onClick={() => {
-                  closeCart();
-                  router.push('/checkout');
-                }}
+                onClick={handleCheckout}
               >
                 Finalizar compra
               </Button>
